@@ -1,13 +1,16 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 import { usersAtom } from '@/recoil/atoms/users';
 
 interface InGameProps {
   setProgress: Dispatch<SetStateAction<string>>;
+  topics: {
+    wolf: string;
+    civil: string;
+  };
 }
-export const InGame: React.FC<InGameProps> = ({ setProgress }) => {
-  const topics: string[] = useMemo(() => ['水', 'お湯'], []);
+export const InGame: React.FC<InGameProps> = ({ setProgress, topics }) => {
   const [confirm, setConfirm] = useState<boolean>(false);
   const [users, setUsers] = useRecoilState(usersAtom);
   const [currentUserIndex, setCurrentUserIndex] = useState<number>(0);
@@ -21,8 +24,8 @@ export const InGame: React.FC<InGameProps> = ({ setProgress }) => {
     setUsers((prevState) => {
       return prevState.map((user, i) => {
         return i === wolfIndex
-          ? { ...user, topic: topics[0] }
-          : { ...user, topic: topics[1] };
+          ? { ...user, topic: topics.wolf }
+          : { ...user, topic: topics.civil };
       });
     });
   }, [users.length, setUsers, topics]);
@@ -70,7 +73,6 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
         return i === currentUserIndex ? { ...user, senryu: text } : user;
       });
     });
-    console.log(users);
     setConfirm(false);
     setCurrentUserIndex((prevState) => prevState + 1);
   };
