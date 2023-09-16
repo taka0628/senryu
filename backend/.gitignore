@@ -1,0 +1,6 @@
+.venv/*
+.vscode/*
+.pytest_cache/
+.dockervenv/
+
+__pycache__
