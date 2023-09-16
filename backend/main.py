@@ -7,7 +7,7 @@ from api import results, topics
 app = Flask(__name__)
 app.register_blueprint(results.app)
 app.register_blueprint(topics.app)
-CORS(app, origins="*")
+CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 if __name__ == "__main__":
