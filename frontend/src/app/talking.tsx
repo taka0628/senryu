@@ -16,7 +16,7 @@ export const Talking: React.FC<TalkingProps> = ({ setProgress }) => {
 
   useEffect(() => {
     if (time === 0) {
-      setProgress('reault');
+      setProgress('result');
     }
   }, [time, setProgress]);
   return <div>{`${time}`}</div>;
