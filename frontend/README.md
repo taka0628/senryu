@@ -34,6 +34,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ## ライブラリ
-- cssライブラリ - CSS Modules
+- css - CSS Modules
 - UIコンポーネント - ChakraUI
 - 状態管理 - Recoil
+- HTTP通信 - axios

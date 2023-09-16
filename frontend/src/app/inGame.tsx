@@ -93,7 +93,7 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
         <Text fontSize='2xl'>お題:{`${users[currentUserIndex]?.topic}`}</Text>
       </GridItem>
       <GridItem w='100%' h='10%' className={styles.center}>
-        <Timer limit={300} action={onClick} />
+        <Timer limit={10} action={onClick} />
       </GridItem>
       <GridItem w='100%' h='30%' className={styles.center}>
         <Textarea
