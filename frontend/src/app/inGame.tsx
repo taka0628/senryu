@@ -1,6 +1,10 @@
+import { Grid, GridItem, Text, Textarea } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
+import styles from '@/app/page.module.css';
+import { ActionButton } from '@/component/actionButton';
+import { Timer } from '@/component/timer';
 import { usersAtom } from '@/recoil/atoms/users';
 
 interface InGameProps {
@@ -81,13 +85,28 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
     setText(e.target.value);
   };
   return (
-    <>
-      <div>{`${users[currentUserIndex]?.name}の番`}</div>
-      <div>お題</div>
-      <div>{`${users[currentUserIndex]?.topic}`}</div>
-      <textarea value={text} onChange={onChange} />
-      <button onClick={onClick}>submit</button>
-    </>
+    <Grid templateRows='repeat(5, 1fr)' gap={'5%'} h='100vh'>
+      <GridItem w='100%' h='10%' className={styles.center}>
+        <Text fontSize='3xl'>{`${users[currentUserIndex]?.name}の番`}</Text>
+      </GridItem>
+      <GridItem w='100%' h='10%' className={styles.center}>
+        <Text fontSize='2xl'>お題:{`${users[currentUserIndex]?.topic}`}</Text>
+      </GridItem>
+      <GridItem w='100%' h='10%' className={styles.center}>
+        <Timer limit={300} action={onClick} />
+      </GridItem>
+      <GridItem w='100%' h='30%' className={styles.center}>
+        <Textarea
+          placeholder='あああああ'
+          value={text}
+          onChange={onChange}
+          className={styles.textaera}
+        />
+      </GridItem>
+      <GridItem w='100%' h='20%' className={styles.center}>
+        <ActionButton action={onClick} title={'提出'} />
+      </GridItem>
+    </Grid>
   );
 };
 

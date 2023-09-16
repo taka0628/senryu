@@ -230,3 +230,10 @@
     transform: rotate(0deg);
   }
 }
+
+.textaera{
+  width: 80%;
+  border-color: #C95F3F;
+  border-width: 1px;
+  border-radius: 10px;
+}
