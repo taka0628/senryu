@@ -33,4 +33,6 @@ RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
 
 # USER ${_DOCKER_USER}
 
-ENTRYPOINT ["poetry", "run", "python", "main.py"]
+ENTRYPOINT ["python", "main.py"]
+# 無限ループ
+# ENTRYPOINT ["bash", "-c", "while :; do sleep 10; done"]
