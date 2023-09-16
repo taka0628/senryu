@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 interface Timer {
   limit: number;
-  action: () => void;
+  action?: () => void;
 }
 export const Timer: React.FC<Timer> = ({ limit, action }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -14,7 +14,9 @@ export const Timer: React.FC<Timer> = ({ limit, action }) => {
       if (time > 0) {
         setTime(time - 1);
       } else {
-        action();
+        if (action) {
+          action();
+        }
       }
     }, 1000);
 

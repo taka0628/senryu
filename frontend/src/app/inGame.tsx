@@ -1,5 +1,5 @@
 import { Grid, GridItem, Text, Textarea } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 import styles from '@/app/page.module.css';
@@ -9,9 +9,12 @@ import { usersAtom } from '@/recoil/atoms/users';
 
 interface InGameProps {
   setProgress: Dispatch<SetStateAction<string>>;
+  topics: {
+    wolf: string;
+    civil: string;
+  };
 }
-export const InGame: React.FC<InGameProps> = ({ setProgress }) => {
-  const topics: string[] = useMemo(() => ['水', 'お湯'], []);
+export const InGame: React.FC<InGameProps> = ({ setProgress, topics }) => {
   const [confirm, setConfirm] = useState<boolean>(false);
   const [users, setUsers] = useRecoilState(usersAtom);
   const [currentUserIndex, setCurrentUserIndex] = useState<number>(0);
@@ -25,8 +28,8 @@ export const InGame: React.FC<InGameProps> = ({ setProgress }) => {
     setUsers((prevState) => {
       return prevState.map((user, i) => {
         return i === wolfIndex
-          ? { ...user, topic: topics[0] }
-          : { ...user, topic: topics[1] };
+          ? { ...user, topic: topics.wolf }
+          : { ...user, topic: topics.civil };
       });
     });
   }, [users.length, setUsers, topics]);
@@ -37,9 +40,6 @@ export const InGame: React.FC<InGameProps> = ({ setProgress }) => {
     }
   }, [currentUserIndex, setProgress, users.length]);
 
-  useEffect(() => {
-    console.log(confirm);
-  }, [confirm]);
   return (
     <>
       {confirm ? (
@@ -77,7 +77,6 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
         return i === currentUserIndex ? { ...user, senryu: text } : user;
       });
     });
-    console.log(users);
     setConfirm(false);
     setCurrentUserIndex((prevState) => prevState + 1);
   };
@@ -85,7 +84,7 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
     setText(e.target.value);
   };
   return (
-    <Grid templateRows='repeat(5, 1fr)' gap={'5%'} h='100vh'>
+    <Grid templateRows='repeat(5)' gap={'5%'} h='100vh'>
       <GridItem w='100%' h='10%' className={styles.center}>
         <Text fontSize='3xl'>{`${users[currentUserIndex]?.name}の番`}</Text>
       </GridItem>

@@ -1,16 +1,25 @@
-import { Card, CardBody } from '@chakra-ui/card';
 import { Text } from '@chakra-ui/react';
 import React from 'react';
 
+import styles from '@/app/page.module.css';
+
 interface tanzakuProps {
-  senryu: string;
+  kami: string;
+  naka: string;
+  shimo: string;
 }
-export const Tanzaku: React.FC<tanzakuProps> = ({ senryu }) => {
+export const Tanzaku: React.FC<tanzakuProps> = ({ kami, naka, shimo }) => {
   return (
-    <Card>
-      <CardBody>
-        <Text>{senryu}</Text>
-      </CardBody>
-    </Card>
+    <div className={styles.verticalBanner}>
+      <Text fontSize='2xl' className={styles.verticalText}>
+        {shimo}
+      </Text>
+      <Text fontSize='2xl' className={styles.verticalText}>
+        {naka}
+      </Text>
+      <Text fontSize='2xl' className={styles.verticalText}>
+        {kami}
+      </Text>
+    </div>
   );
 };
