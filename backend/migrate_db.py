@@ -3,8 +3,6 @@ from sqlalchemy.orm import sessionmaker
 
 from db.models import Base
 
-# from db.db import Base
-
 import db.db as db
 import db.models as model
 
@@ -97,8 +95,8 @@ def reset_database():
     make_sample_results()
     # db.add_result(db.get_db(), add_result)
     make_sample_topics()
-    print(db.get_results())
-    print(db.get_topics())
+    print(f"get_results: {db.get_results()}")
+    print(f"get_topics: {db.get_topics()}")
 
 
 if __name__ == "__main__":

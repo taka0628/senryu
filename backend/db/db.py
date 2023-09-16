@@ -47,7 +47,7 @@ def get_results():
     # session = Session()
     db = session.query(db_model.result).all()
     # return db
-    return [result.__dict__ for result in db]
+    return remove_unused_key([result.__dict__ for result in db])
     # # 結果を出力
     # for result in results:
     #     print(
@@ -61,7 +61,7 @@ def get_topics():
     # session = Session()
     db = session.query(db_model.topic).all()
     # return db
-    return [topic.__dict__ for topic in db]
+    return remove_unused_key([topic.__dict__ for topic in db])
 
 
 # async def add_result(db: AsyncSession, add_result: schema.AddResult) -> model.result:
@@ -71,3 +71,10 @@ def get_topics():
 #     await db.commit()
 #     await db.refresh(result)
 #     return result
+
+
+def remove_unused_key(li):
+    return [
+        {key: value for key, value in item.items() if key != "_sa_instance_state"}
+        for item in li
+    ]

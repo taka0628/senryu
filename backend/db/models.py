@@ -9,7 +9,7 @@ class result(Base):
     __tablename__ = "results"
 
     id = Column(Integer, primary_key=True)
-    game_id = Column(Integer)
+    game_id = Column(Integer, nullable=False)
     senryu = Column(String(1024), nullable=False)
     topic = Column(String(1024), nullable=False)
     is_wolf = Column(Boolean, nullable=False)
