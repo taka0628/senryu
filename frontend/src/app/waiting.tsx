@@ -35,11 +35,13 @@ export const Waiting: React.FC<WaitingProps> = ({ setProgress }) => {
     );
   };
   return (
-    <Grid templateRows='repeat(4, 1fr)' gap={'5%'} h='100vh'>
+    <Grid templateRows='repeat(4)' h='100vh'>
       <GridItem w='100%' h='20%' className={styles.center}>
-        <Text fontSize='5xl'>タイトル</Text>
+        <Text fontSize='5xl' className={styles.title}>
+          タイトル
+        </Text>
       </GridItem>
-      <GridItem w='100%' h='40%' className={styles.center}>
+      <GridItem w='100%' h='60%' className={styles.center}>
         <div>
           <UserList />
         </div>

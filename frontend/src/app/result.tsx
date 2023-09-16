@@ -1,6 +1,9 @@
+import { Grid, GridItem, Text } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { useRecoilValue } from 'recoil';
 
+import styles from '@/app/page.module.css';
+import { ActionButton } from '@/component/actionButton';
 import { usersAtom } from '@/recoil/atoms/users';
 import axios from '@/utils/axios';
 
@@ -64,11 +67,21 @@ export const Result: React.FC<ResultProps> = ({ setProgress, topics }) => {
   };
 
   return (
-    <>
-      <div>結果発表</div>
-      <CivilList />
-      <WolfList />
-      <button onClick={onClick}>ホームに戻る</button>
-    </>
+    <Grid templateRows='repeat(4)' h='100vh'>
+      <GridItem w='100%' h='20%' className={styles.center}>
+        <Text fontSize='5xl' className={styles.title}>
+          結果発表
+        </Text>
+      </GridItem>
+      <GridItem w='100%' h='60%' className={styles.center}>
+        <div>
+          <CivilList />
+          <WolfList />
+        </div>
+      </GridItem>
+      <GridItem w='100%' h='20%' className={styles.center}>
+        <ActionButton action={onClick} title={'ホームに戻る'} />
+      </GridItem>
+    </Grid>
   );
 };
