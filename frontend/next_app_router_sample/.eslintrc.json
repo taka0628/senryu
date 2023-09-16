@@ -1,0 +1,107 @@
+{
+  "root": true, 
+  "env": {
+    "browser": true,     
+    "es2020": true 
+  },
+  "extends": [
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:jest/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser", 
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "import", "prettier", "jsx-a11y", "jest"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"] 
+      },
+
+      "typescript": {
+        "config": "tsconfig.json", 
+        "alwaysTryTypes": true
+      }
+    },
+    "react": {
+      "version": "18.2.0"
+    }
+  },
+  "rules": {
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [".jsx", ".tsx"] }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "all",
+        "endOfLine": "lf",
+        "semi": true,
+        "singleQuote": true,
+        "jsxSingleQuote": true,
+        "printWidth": 80,
+        "tabWidth": 2
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "import/order": [
+        "error",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type"
+          ],
+          "newlines-between": "always",
+          "pathGroups": [
+            {
+              "pattern": "react** | next**",
+              "group": "external",
+              "position": "before"
+            },
+            {
+              "pattern": "@/**",
+              "group": "parent",
+              "position": "before"
+            },
+            {
+              "pattern": "**/*.module.css",
+              "group": "type",
+              "position": "after"
+            }
+          ],
+          "pathGroupsExcludedImportTypes": ["builtin"],
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          }
+        }
+        ]
+      }
+    }
+  ]
+}

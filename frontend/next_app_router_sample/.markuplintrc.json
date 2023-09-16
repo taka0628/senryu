@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "markuplint:recommended"
+  ],
+  "excludeFiles": [
+    "./node_modules/**/*",
+    "./src/tests/**"
+  ],
+  "parser": {
+    ".[jt]sx$": "@markuplint/jsx-parser"
+  },
+  "specs": {
+    ".[jt]sx$": "@markuplint/react-spec"
+  }
+}
