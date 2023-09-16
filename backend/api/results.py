@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from models import result
-from db import db
+from db import db, models
 
 app = Blueprint("results", __name__)
 
@@ -36,8 +36,13 @@ def save_result():
         return jsonify({"status": "error", "errors": form.errors})
 
     data = form.data
-
     print(data)
-    db.add_result(data)
+    data_object = models.result(
+        game_id=data["game_id"],
+        senryu=data["senryu"],
+        topic=data["topic"],
+        is_wolf=data["is_wolf"],
+    )
+    db.add_result(data_object)
 
     return jsonify({"status": "success"})
