@@ -7,7 +7,7 @@ services:
       - .dockervenv:/app/.venv
       - .:/app
     ports:
-      - 5000:5000
+      - 55555:55555
 
   db:
       build:
