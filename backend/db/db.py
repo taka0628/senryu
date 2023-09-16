@@ -43,13 +43,25 @@ def add_topics(topic: db_model.topic):
 
 def get_results():
     # データを取得
-    results = session.query(db_model.result).all()
-    return [result.__dict__ for result in results]
+    # results = session.query(db_model.result).all()
+    # session = Session()
+    db = session.query(db_model.result).all()
+    # return db
+    return [result.__dict__ for result in db]
     # # 結果を出力
     # for result in results:
     #     print(
     #         f"ID: {result.id}, Game ID: {result.game_id}, Senryu: {result.senryu}, Topic: {result.topic}, Is Wolf: {result.is_wolf}"
     #     )
+
+
+def get_topics():
+    # データを取得
+    # results = session.query(db_model.result).all()
+    # session = Session()
+    db = session.query(db_model.topic).all()
+    # return db
+    return [topic.__dict__ for topic in db]
 
 
 # async def add_result(db: AsyncSession, add_result: schema.AddResult) -> model.result:

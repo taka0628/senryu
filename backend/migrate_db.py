@@ -97,7 +97,8 @@ def reset_database():
     make_sample_results()
     # db.add_result(db.get_db(), add_result)
     make_sample_topics()
-    # print(get_results())
+    print(db.get_results())
+    print(db.get_topics())
 
 
 if __name__ == "__main__":
