@@ -13,10 +13,10 @@ db-reset:
 
 db-show:
 	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'show tables;'"
-	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'DESCRIBE tasks;'"
-	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'DESCRIBE dones;'"
-	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'SELECT * FROM tasks;'"
-	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'SELECT * FROM dones;'"
+	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'DESCRIBE results;'"
+	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'SELECT * FROM results;'"
+	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'DESCRIBE topics;'"
+	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'SELECT * FROM topics;'"
 
 db-connect:
 	docker-compose exec db bash -c "mysql ${SQL_TABLE}"
