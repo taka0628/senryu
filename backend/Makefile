@@ -1,14 +1,15 @@
 
 .PHONY:
 
-CONTAINER := senryu-app
+CONTAINER_APP := senryu-app
+CONTAINER_DB:= db
 SQL_TABLE := senryu
 
 container-up:
 	docker-compose up
 
 db-reset:
-	docker-compose exec ${CONTAINER} poetry run python -m migrate_db
+	docker-compose exec ${CONTAINER_APP} poetry run python -m migrate_db
 
 db-show:
 	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'show tables;'"
@@ -20,5 +21,10 @@ db-show:
 db-connect:
 	docker-compose exec db bash -c "mysql ${SQL_TABLE}"
 
-test:
-	docker-compose run --entrypoint "poetry run pytest" ${CONTAINER}
+build:
+	docker-compose build ${CONTAINER_APP}
+	docker-compose build ${CONTAINER_DB}
+
+rebuild:
+	docker-compose build --no-cache ${CONTAINER_APP}
+	docker-compose build --no-cache ${CONTAINER_DB}
