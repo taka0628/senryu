@@ -1,7 +1,12 @@
+import { Grid, GridItem, Text } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
+// eslint-disable-next-line import/named
+import { ActionButton } from '@/component/actionButton';
 import { usersAtom } from '@/recoil/atoms/users';
+
+import styles from './page.module.css';
 
 interface WaitingProps {
   setProgress: Dispatch<SetStateAction<string>>;
@@ -30,10 +35,21 @@ export const Waiting: React.FC<WaitingProps> = ({ setProgress }) => {
     );
   };
   return (
-    <>
-      <UserList />
-      <button onClick={addPlayer}>プレイヤーを追加</button>
-      <button onClick={start}>start</button>
-    </>
+    <Grid templateRows='repeat(4, 1fr)' gap={'5%'} h='100vh'>
+      <GridItem w='100%' h='20%' className={styles.center}>
+        <Text fontSize='5xl'>タイトル</Text>
+      </GridItem>
+      <GridItem w='100%' h='40%' className={styles.center}>
+        <div>
+          <UserList />
+        </div>
+      </GridItem>
+      <GridItem w='100%' h='10%' className={styles.center}>
+        <ActionButton action={addPlayer} title={'プレイヤーを追加'} />
+      </GridItem>
+      <GridItem w='100%' h='10%' className={styles.center}>
+        <ActionButton action={start} title={'ゲームを始める'} />
+      </GridItem>
+    </Grid>
   );
 };
