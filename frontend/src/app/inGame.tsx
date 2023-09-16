@@ -33,9 +33,6 @@ export const InGame: React.FC<InGameProps> = ({ setProgress }) => {
     }
   }, [currentUserIndex, setProgress, users.length]);
 
-  useEffect(() => {
-    console.log(confirm);
-  }, [confirm]);
   return (
     <>
       {confirm ? (
