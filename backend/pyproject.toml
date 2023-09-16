@@ -12,6 +12,9 @@ fastapi = "^0.103.1"
 uvicorn = {extras = ["standard"], version = "^0.23.2"}
 sqlalchemy = "^2.0.20"
 aiomysql = "^0.2.0"
+flask = "^2.3.3"
+flask-socketio = "^5.3.6"
+wtforms = "^3.0.1"
 
 
 [build-system]

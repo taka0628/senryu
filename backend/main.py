@@ -1,8 +1,12 @@
-from fastapi import FastAPI
+from flask import Flask
+from flask_socketio import SocketIO
 
-app = FastAPI()
+from api import results, topics
 
+app = Flask(__name__)
+app.register_blueprint(results.app)
+app.register_blueprint(topics.app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
-@app.get("/hello")
-async def hello():
-    return {"message": "hello world!"}
+if __name__ == "__main__":
+    socketio.run(app, host='0.0.0.0', debug=True, allow_unsafe_werkzeug=True)
