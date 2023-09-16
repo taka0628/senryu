@@ -1,23 +1,31 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, declarative_base
+# from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
+# from sqlalchemy.orm import sessionmaker, declarative_base
+
+# import db.models as db_model
+# import schemas as schema
+
+# from typing import List, Tuple, Optional
+
+# from sqlalchemy import select, create_engine
+# from sqlalchemy.engine import Result
+# from sqlalchemy.ext.asyncio import AsyncSession
+
+# from sqlalchemy.orm import sessionmaker, declarative_base
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+
+# from db.db import Base
+
+import db.db as db
 import db.models as db_model
-import schemas as schema
 
-from typing import List, Tuple, Optional
-
-from sqlalchemy import select, create_engine
-from sqlalchemy.engine import Result
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from sqlalchemy.orm import sessionmaker, declarative_base
-
-ASYNC_DB_URL = "mysql+aiomysql://root@db:3306/senryu?charset=utf8"
+ASYNC_DB_URL = "mysql+pymysql://root@db:3306/senryu?charset=utf8"
 
 engine = create_engine(ASYNC_DB_URL, echo=True)
 Session = sessionmaker(
-    autocommit=False,
-    autoflush=False,
     bind=engine,
 )
 session = Session()

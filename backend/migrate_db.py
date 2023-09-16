@@ -33,46 +33,47 @@ def add_topics(topic: model.topic):
 
 
 def make_sample_topics():
-    add_result(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
+    # add_result(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
+    db.add_topics(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
 
 
 def make_sample_results():
-    add_result(
+    db.add_result(
         model.result(
             game_id=1, senryu="ハッカソン\n創意の競演\n未来の鍵", topic="ハッカソン", is_wolf=False
         )
     )
-    add_result(
+    db.add_result(
         model.result(
             game_id=1, senryu="コードの語\n画面に響く\n夢のシンフォニー", topic="ハッカソン", is_wolf=False
         )
     )
-    add_result(
+    db.add_result(
         model.result(
             game_id=1, senryu="チームの絆\n一糸乱れぬ\n目指す成功", topic="ハッカソン", is_wolf=False
         )
     )
-    add_result(
+    db.add_result(
         model.result(
             game_id=1, senryu="Pythonの\nコード\n優雅な舞", topic="プログラミング言語", is_wolf=True
         )
     )
-    add_result(
+    db.add_result(
         model.result(
             game_id=2, senryu="カフェイン注入\n仲間と笑顔\n夜が明ける", topic="ハッカソン", is_wolf=False
         )
     )
-    add_result(
+    db.add_result(
         model.result(
             game_id=2, senryu="デジタルの森\nアイデアの芽\n成長の季", topic="ハッカソン", is_wolf=False
         )
     )
-    add_result(
+    db.add_result(
         model.result(
             game_id=2, senryu="コンピュータ\n数字と文字\n未来の詩", topic="ハッカソン", is_wolf=False
         )
     )
-    add_result(
+    db.add_result(
         model.result(
             game_id=2,
             senryu="JavaScript\nウェブの魔法\n輝く星",
@@ -86,7 +87,7 @@ def get_results():
     session = Session()
     db = session.query(model.result).all()
     for row in db:
-        print(row)
+        print(row.senryu)
 
 
 def reset_database():
@@ -96,7 +97,7 @@ def reset_database():
     make_sample_results()
     # db.add_result(db.get_db(), add_result)
     make_sample_topics()
-    print(db.get_results())
+    # print(get_results())
 
 
 if __name__ == "__main__":

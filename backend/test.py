@@ -10,4 +10,4 @@ import db.models as model
 
 
 if __name__ == "__main__":
-    db.get_results()
+    db.add_topics(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
