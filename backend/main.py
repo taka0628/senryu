@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_socketio import SocketIO
 
 from api import results, topics
@@ -6,7 +7,8 @@ from api import results, topics
 app = Flask(__name__)
 app.register_blueprint(results.app)
 app.register_blueprint(topics.app)
+CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0', debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, port='8888', host='0.0.0.0', debug=True, allow_unsafe_werkzeug=True)

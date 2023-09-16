@@ -86,7 +86,10 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
   return (
     <Grid templateRows='repeat(5)' gap={'5%'} h='100vh'>
       <GridItem w='100%' h='10%' className={styles.center}>
-        <Text fontSize='3xl'>{`${users[currentUserIndex]?.name}の番`}</Text>
+        <Text
+          fontSize='3xl'
+          className={styles.title}
+        >{`${users[currentUserIndex]?.name}の番`}</Text>
       </GridItem>
       <GridItem w='100%' h='10%' className={styles.center}>
         <Text fontSize='2xl'>お題:{`${users[currentUserIndex]?.topic}`}</Text>

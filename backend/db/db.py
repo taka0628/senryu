@@ -28,15 +28,16 @@ engine = create_engine(ASYNC_DB_URL, echo=True)
 Session = sessionmaker(
     bind=engine,
 )
-session = Session()
 
 
 def add_result(result: db_model.result):
+    session = Session()
     session.add(result)
     session.commit()
 
 
 def add_topics(topic: db_model.topic):
+    session = Session()
     session.add(topic)
     session.commit()
 
@@ -45,6 +46,7 @@ def get_results():
     # データを取得
     # results = session.query(db_model.result).all()
     # session = Session()
+    session = Session()
     db = session.query(db_model.result).all()
     # return db
     return remove_unused_key([result.__dict__ for result in db])
@@ -59,6 +61,7 @@ def get_topics():
     # データを取得
     # results = session.query(db_model.result).all()
     # session = Session()
+    session = Session()
     db = session.query(db_model.topic).all()
     # return db
     return remove_unused_key([topic.__dict__ for topic in db])

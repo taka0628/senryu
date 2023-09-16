@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
+  padding: 10rem;
   min-height: 100vh;
   overflow: hidden;
   width: 100%;
@@ -238,4 +238,7 @@
   justify-content: flex-start;
   align-items: center;
   overflow-x: scroll;
+}
+.title{
+  padding-top: 40%;
 }

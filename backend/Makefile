@@ -9,10 +9,10 @@ container-up:
 	docker-compose up
 
 db-reset:
-	docker-compose exec ${CONTAINER_APP} poetry run python -m migrate_db
+	docker-compose exec ${CONTAINER_APP} python -m migrate_db
 
 db-test:
-	docker-compose exec ${CONTAINER_APP} poetry run python -m test
+	docker-compose exec ${CONTAINER_APP} python -m test
 
 db-show:
 	docker-compose exec db bash -c "mysql ${SQL_TABLE} -e 'show tables;'"

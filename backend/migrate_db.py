@@ -33,6 +33,7 @@ def add_topics(topic: model.topic):
 def make_sample_topics():
     # add_result(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
     db.add_topics(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
+    db.add_topics(model.topic(theme="自然", topic1="海", topic2="川"))
 
 
 def make_sample_results():
