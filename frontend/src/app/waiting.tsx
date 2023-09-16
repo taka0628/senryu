@@ -8,11 +8,11 @@ import { usersAtom } from '@/recoil/atoms/users';
 
 import styles from './page.module.css';
 
-interface CreateRoomState {
+interface WaitingProps {
   setProgress: Dispatch<SetStateAction<string>>;
 }
 
-export const CreateRoom: React.FC<CreateRoomState> = ({ setProgress }) => {
+export const Waiting: React.FC<WaitingProps> = ({ setProgress }) => {
   const [users, setUsers] = useRecoilState(usersAtom);
   const [numPlayers, setNumPlayers] = useState(1);
 
