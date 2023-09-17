@@ -9,7 +9,7 @@ import { Talking } from './talking';
 export default function Home() {
   const socketRef = useRef<Socket>();
   const [isConnected, setIsConnected] = useState(false);
-  const [progress, setProgress] = useState('waiting');
+  const [progress, setProgress] = useState('enter_room');
   useEffect(() => {
     const websocket = io('ws://localhost:5000');
     socketRef.current = websocket;
@@ -42,9 +42,11 @@ export default function Home() {
       {isConnected && progress === 'enter_room' && (
         <EnterRoom socketRef={socketRef} />
       )}
-      {isConnected && progress === 'ingame' && <InGame />}
-      {isConnected && progress === 'talking' && <Talking />}
-      {isConnected && progress === 'result' && <Result />}
+      {isConnected && progress === 'ingame' && <InGame soektRef={socketRef} />}
+      {isConnected && progress === 'talking' && (
+        <Talking socketRef={socketRef} />
+      )}
+      {isConnected && progress === 'result' && <Result socketRef={socketRef} />}
     </RecoilRoot>
   );
 }
