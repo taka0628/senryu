@@ -1,10 +1,8 @@
-import { Grid, GridItem, Text } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { Grid, GridItem, Input, Text } from '@chakra-ui/react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 // eslint-disable-next-line import/named
 import { ActionButton } from '@/component/actionButton';
-import { usersAtom } from '@/recoil/atoms/users';
 
 import styles from './page.module.css';
 
@@ -13,27 +11,52 @@ interface WaitingProps {
 }
 
 export const Waiting: React.FC<WaitingProps> = ({ setProgress }) => {
-  const [users, setUsers] = useRecoilState(usersAtom);
-  const [numPlayers, setNumPlayers] = useState(1);
+  const socketRef = useRef<WebSocket>();
+  const [isConnected, setIsConnected] = useState(false);
+  const [roomID, setRoomID] = useState('');
+  const [playerName, setPlayerName] = useState('');
+  const [playerList, setPlayerList] = useState('');
 
-  const addPlayer = () => {
-    setUsers((prevState) => [...prevState, { name: `Guest${numPlayers + 1}` }]);
-    setNumPlayers((prevState) => prevState + 1);
-  };
-
-  const start = () => {
+  const sendData = () => {
+    socketRef.current?.send(roomID);
+    socketRef.current?.send(playerName);
     setProgress('ingame');
   };
 
-  const UserList = () => {
-    return (
-      <>
-        {users.map((user, i) => {
-          return <div key={i}>{user.name}</div>;
-        })}
-      </>
-    );
+  useEffect(() => {
+    const websocket = new WebSocket('ws://localhost:5000');
+    socketRef.current = websocket;
+    websocket.onopen = function () {
+      setIsConnected(true);
+      console.log('Connected');
+    };
+
+    //接続が切れた時
+    websocket.close = function () {
+      console.log('closed');
+      setIsConnected(false);
+    };
+
+    // server 側から送られてきたデータを受け取る
+    websocket.onmessage = function (event) {
+      setPlayerList(event.data);
+    };
+
+    return () => {
+      if (socketRef.current === null) {
+        return;
+      }
+      websocket.close();
+    };
+  }, []);
+
+  const onChangeRoom = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRoomID(e.target.value);
   };
+  const onChangePlayer = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlayerName(e.target.value);
+  };
+
   return (
     <Grid templateRows='repeat(4)' h='100vh'>
       <GridItem w='100%' h='20%' className={styles.center}>
@@ -42,15 +65,25 @@ export const Waiting: React.FC<WaitingProps> = ({ setProgress }) => {
         </Text>
       </GridItem>
       <GridItem w='100%' h='60%' className={styles.center}>
-        <div>
-          <UserList />
-        </div>
+        <Input
+          value={roomID}
+          onChange={onChangeRoom}
+          placeholder='ルーム名'
+          size='lg'
+          className={styles.inputBox}
+        />
       </GridItem>
       <GridItem w='100%' h='10%' className={styles.center}>
-        <ActionButton action={addPlayer} title={'プレイヤーを追加'} />
+        <Input
+          value={playerName}
+          onChange={onChangePlayer}
+          placeholder='プレイヤー名'
+          size='lg'
+          className={styles.inputBox}
+        />
       </GridItem>
       <GridItem w='100%' h='10%' className={styles.center}>
-        <ActionButton action={start} title={'ゲームを始める'} />
+        <ActionButton action={sendData} title={'入室する'} />
       </GridItem>
     </Grid>
   );
