@@ -1,57 +1,89 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
 import { RecoilRoot } from 'recoil';
+import { io, Socket } from 'socket.io-client';
 
 import axios from '@/utils/axios';
+import { API_BASE_URL_PROD } from '@/utils/config';
 
+import { EnterRoom } from './enterRoom';
 import { InGame } from './inGame';
 import { Result } from './result';
 import { Talking } from './talking';
-import { Waiting } from './waiting';
 export default function Home() {
-  const senryu = [
-    'あああああ\nあああああああ\nあああああ',
-    'いいいいい\nあああああああ\nあああああ',
-    'ううううう\nあああああああ\nあああああ',
-    'えええええ\nあああああああ\nあああああ',
-  ];
-  const [progress, setProgress] = useState('waiting');
-  const [topic, setTopic] = useState({ wolf: '', civil: '' });
-
+  const roomId = usePathname();
+  const [roomName, setRoomName] = useState('');
+  const [topic, setTopic] = useState('');
+  const socketRef = useRef<Socket>();
+  const [isConnected, setIsConnected] = useState(false);
+  const [progress, setProgress] = useState('enter_room');
+  const [senryuList, setSenryuList] = useState();
   useEffect(() => {
     axios
-      .get('topic')
+      .get(`room${roomId}`)
       .then((res) => {
         console.log(res);
-        if (Math.random() > 0.5) {
-          setTopic({
-            wolf: res.data.topic1,
-            civil: res.data.topic2,
-          });
-        } else {
-          setTopic({
-            wolf: res.data.topic2,
-            civil: res.data.topic1,
-          });
-        }
+        setRoomName(res.data.name);
       })
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+    const websocket = io(API_BASE_URL_PROD);
+    socketRef.current = websocket;
+
+    websocket.on('connect', function () {
+      setIsConnected(true);
+      console.log('Connected');
+    });
+
+    //接続が切れた時
+    websocket.on('disconnect', function () {
+      console.log('closed');
+      setIsConnected(false);
+    });
+
+    // メンバーが集まったらゲーム開始
+    websocket.on('gather_member', (data) => {
+      setProgress('ingame');
+      setTopic(data.topic);
+      console.log(data);
+    });
+
+    //川柳が揃ったら
+    websocket.on('collect_senryu', (data) => {
+      setSenryuList(data);
+      setProgress('talking');
+    });
+
+    websocket.on('error', (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      if (socketRef.current === null) {
+        return;
+      }
+    };
+  }, [roomId]);
 
   return (
     <RecoilRoot>
-      {progress === 'waiting' && <Waiting setProgress={setProgress} />}
-      {progress === 'ingame' && (
-        <InGame setProgress={setProgress} topics={topic} />
+      {isConnected && progress === 'enter_room' && (
+        <EnterRoom socketRef={socketRef} roomName={roomName} />
       )}
-      {progress === 'talking' && (
-        <Talking setProgress={setProgress} senryu={senryu} />
+      {isConnected && progress === 'ingame' && (
+        <InGame
+          socketRef={socketRef}
+          setProgress={setProgress}
+          setSenryuList={setSenryuList}
+          topic={topic}
+        />
       )}
-      {progress === 'result' && (
-        <Result setProgress={setProgress} topics={topic} />
+      {isConnected && progress === 'talking' && (
+        <Talking socketRef={socketRef} senryuList={senryuList} />
       )}
+      {isConnected && progress === 'result' && <Result socketRef={socketRef} />}
     </RecoilRoot>
   );
 }
