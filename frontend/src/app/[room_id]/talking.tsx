@@ -12,7 +12,7 @@ import { Waiting } from './waiting';
 
 interface TalkingProps {
   users: User[];
-  socketRef: MutableRefObject<Socket>;
+  socketRef: MutableRefObject<Socket | undefined>;
 }
 interface User {
   id: string;

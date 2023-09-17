@@ -1,12 +1,10 @@
 import { Grid, GridItem, Text } from '@chakra-ui/react';
 import { DateTime } from '@markuplint/rules/lib/require-datetime/types';
-import { Dispatch, SetStateAction } from 'react';
 
 import styles from '@/app/page.module.css';
 import { ActionButton } from '@/component/actionButton';
 
 interface ResultProps {
-  setProgress: Dispatch<SetStateAction<string>>;
   resultList: Array<ResultList>;
 }
 
@@ -21,9 +19,9 @@ interface ResultList {
   is_wolf: boolean;
 }
 
-export const Result: React.FC<ResultProps> = ({ setProgress, resultList }) => {
+export const Result: React.FC<ResultProps> = ({ resultList }) => {
   const onClick = () => {
-    setProgress('waiting');
+    //router.push('/create_room');
   };
 
   const civilTopic = () => {

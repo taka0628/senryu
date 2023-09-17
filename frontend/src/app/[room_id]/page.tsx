@@ -54,13 +54,6 @@ export default function Home() {
 
     //川柳が揃ったら
     websocket.on('collect_senryu', (data) => {
-      setSenryuList(data);
-      setProgress('talking');
-    });
-    //投票が揃ったら
-    websocket.on('collect_polls', (data) => {
-      setResultList(data);
-    });
       const user = [];
       setSenryuList(data);
       console.log(Object.values(data));
@@ -76,6 +69,12 @@ export default function Home() {
       setUsers(user);
       setProgress('talking');
     });
+    //投票が揃ったら
+    websocket.on('collect_polls', (data) => {
+      setResultList(data);
+      setProgress('result');
+    });
+
     websocket.on('error', (data) => {
       console.log(data);
     });
@@ -103,7 +102,9 @@ export default function Home() {
       {isConnected && progress === 'talking' && (
         <Talking socketRef={socketRef} users={users} />
       )}
-      {isConnected && progress === 'result' && <Result socketRef={socketRef} resultList={resultList}/>}
+      {isConnected && progress === 'result' && (
+        <Result resultList={resultList} />
+      )}
     </RecoilRoot>
   );
 }
