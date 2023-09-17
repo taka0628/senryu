@@ -159,7 +159,7 @@ def post_senryu(data):
 
     # すべての川柳が集まったら
     is_collected_all_senryu = all(
-        [player['senryu'] is not None for player in rooms[room_id]['player_dict']])
+        [player['senryu'] is not None for player in rooms[room_id]['player_dict'].values()])
     if is_collected_all_senryu:
         for player_info in rooms[room_id]['player_dict'].values():
             # 各プレイヤーに川柳を送信
