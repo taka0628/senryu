@@ -39,7 +39,6 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({ socketRef, topic }) => {
 
   const onClick = () => {
     setIswaiting(true);
-      console.log(socketRef)
     //川柳を投稿
     socketRef.current?.emit('post_senryu', {
       room_id: roomId.slice(1),

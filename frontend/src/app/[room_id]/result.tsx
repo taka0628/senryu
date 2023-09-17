@@ -1,52 +1,61 @@
 import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { DateTime } from '@markuplint/rules/lib/require-datetime/types';
 import { Dispatch, SetStateAction } from 'react';
-import { useRecoilValue } from 'recoil';
 
 import styles from '@/app/page.module.css';
 import { ActionButton } from '@/component/actionButton';
-import { usersAtom } from '@/recoil/atoms/users';
-import axios from '@/utils/axios';
 
 interface ResultProps {
   setProgress: Dispatch<SetStateAction<string>>;
-  topics: {
-    wolf: string;
-    civil: string;
-  };
+  resultList: Array<ResultList>;
 }
 
-export const Result: React.FC<ResultProps> = ({ setProgress, topics }) => {
-  const users = useRecoilValue(usersAtom);
+interface ResultList {
+  id: string;
+  dt: DateTime;
+  room_id: string;
+  username: string;
+  post_username: string;
+  senryu: string;
+  topic: string;
+  is_wolf: boolean;
+}
 
+export const Result: React.FC<ResultProps> = ({ setProgress, resultList }) => {
   const onClick = () => {
-    users.forEach((user) => {
-      const form = new FormData();
-      form.append('game_id', '1');
-      form.append('senryu', user.senryu ? user.senryu : '');
-      form.append('topic', user.topic ? user.topic : '');
-      form.append('is_wolf', user.topic === topics.wolf ? 'true' : 'false');
-      axios
-        .post('result', form)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    });
     setProgress('waiting');
+  };
+
+  const civilTopic = () => {
+    let civil;
+    resultList.map((user) => {
+      if (user.is_wolf === false) {
+        civil = user.topic;
+      }
+    });
+    return civil;
+  };
+
+  const wolfTopic = () => {
+    let wolf;
+    resultList.map((user) => {
+      if (user.is_wolf === true) {
+        wolf = user.topic;
+      }
+    });
+    return wolf;
   };
 
   const CivilList = () => {
     return (
       <>
-        <div>{topics.civil}</div>
-        {users
+        <div>{civilTopic}</div>
+        {resultList
           .filter((user) => {
-            return user.topic === topics.civil;
+            return user.is_wolf === false;
           })
           .map((user, i) => {
-            return <div key={i}>{user.name}</div>;
+            return <div key={i}>{user.username}</div>;
           })}
       </>
     );
@@ -54,13 +63,13 @@ export const Result: React.FC<ResultProps> = ({ setProgress, topics }) => {
   const WolfList = () => {
     return (
       <>
-        <div>{topics.wolf}</div>
-        {users
+        <div>{wolfTopic}</div>
+        {resultList
           .filter((user) => {
-            return user.topic === topics.wolf;
+            return user.is_wolf === true;
           })
           .map((user, i) => {
-            return <div key={i}>{user.name}</div>;
+            return <div key={i}>{user.username}</div>;
           })}
       </>
     );
