@@ -17,7 +17,9 @@ export const Talking: React.FC<TalkingProps> = ({ setProgress, senryu }) => {
   return (
     <Grid templateRows='repeat(3)' h='100vh'>
       <GridItem w='100%' h='10%' className={styles.center}>
-        <Text fontSize='3xl' className={styles.title}>投票</Text>
+        <Text fontSize='3xl' className={styles.title}>
+          投票
+        </Text>
       </GridItem>
       <GridItem w='100%' h='10%' className={styles.center}>
         <Timer limit={10} action={finish} />
