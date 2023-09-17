@@ -38,10 +38,10 @@ def add_result(result: db_model.result):
     session.add(result)
     session.commit()
 
-
 def add_results(results: List[db_model.result]):
     session = Session()
-    session.add(results)
+    for result in results:
+        session.add(result)
     session.commit()
 
 

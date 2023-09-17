@@ -47,68 +47,42 @@ def make_sample_results():
             room_id=uid,
             senryu="ハッカソン\n創意の競演\n未来の鍵",
             username="user1",
+            post_username="user2",
             topic="ハッカソン",
             is_wolf=False,
         ), model.result(
             room_id=uid,
             senryu="コードの語\n画面に響く\n夢のシンフォニー",
             username="user2",
+            post_username="user3",
             topic="ハッカソン",
             is_wolf=False,
         ),
         model.result(
-            model.result(
             room_id=uid,
             senryu="チームの絆\n一糸乱れぬ\n目指す成功",
             username="user3",
+            post_username="user4",
             topic="ハッカソン",
             is_wolf=False,
         ),
-        )
-        ]
-    db.add_results(temp_results)
-    db.add_result(
-        model.result(
-            room_id=uid,
-            senryu="ハッカソン\n創意の競演\n未来の鍵",
-            username="user1",
-            topic="ハッカソン",
-            is_wolf=False,
-        )
-    )
-    db.add_result(
-        model.result(
-            room_id=uid,
-            senryu="コードの語\n画面に響く\n夢のシンフォニー",
-            username="user2",
-            topic="ハッカソン",
-            is_wolf=False,
-        )
-    )
-    db.add_result(
-        model.result(
-            room_id=uid,
-            senryu="チームの絆\n一糸乱れぬ\n目指す成功",
-            username="user3",
-            topic="ハッカソン",
-            is_wolf=False,
-        )
-    )
-    db.add_result(
         model.result(
             room_id=uid,
             senryu="Pythonの\nコード\n優雅な舞",
             username="user4",
+            post_username="user1",
             topic="プログラミング言語",
             is_wolf=True,
         )
-    )
+        ]
+    db.add_results(temp_results)
     uid = str(uuid.uuid1())
     db.add_result(
         model.result(
             room_id=uid,
             senryu="カフェイン注入\n仲間と笑顔\n夜が明ける",
             username="user1",
+            post_username="user2",
             topic="ハッカソン",
             is_wolf=False,
         )
@@ -118,6 +92,7 @@ def make_sample_results():
             room_id=uid,
             senryu="デジタルの森\nアイデアの芽\n成長の季",
             username="user2",
+            post_username="user3",
             topic="ハッカソン",
             is_wolf=False,
         )
@@ -127,6 +102,7 @@ def make_sample_results():
             room_id=uid,
             senryu="コンピュータ\n数字と文字\n未来の詩",
             username="user3",
+            post_username="user4",
             topic="ハッカソン",
             is_wolf=False,
         )
@@ -136,6 +112,7 @@ def make_sample_results():
             room_id=uid,
             senryu="JavaScript\nウェブの魔法\n輝く星",
             username="user4",
+            post_username="user1",
             topic="プログラミング言語",
             is_wolf=True,
         )
