@@ -31,9 +31,10 @@ def add_topics(topic: model.topic):
 
 
 def make_sample_topics():
-    # add_result(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
-    db.add_topics(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
-    db.add_topics(model.topic(theme="自然", topic1="海", topic2="川"))
+    db.add_topic(model.topic(theme="IT", topic1="ハッカソン", topic2="プログラミング言語"))
+    db.add_topic(model.topic(theme="自然", topic1="海", topic2="川"))
+    db.add_topic(model.topic(theme="季節", topic1="秋の静けさ", topic2="冬の寒さ"))
+    db.add_topic(model.topic(theme="人生", topic1="変化と成長", topic2="夢と希望"))
 
 
 def make_sample_results():

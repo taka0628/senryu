@@ -16,6 +16,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+import random
 
 # from db.db import Base
 
@@ -36,7 +37,7 @@ def add_result(result: db_model.result):
     session.commit()
 
 
-def add_topics(topic: db_model.topic):
+def add_topic(topic: db_model.topic):
     session = Session()
     session.add(topic)
     session.commit()
@@ -59,12 +60,19 @@ def get_results():
 
 def get_topics():
     # データを取得
-    # results = session.query(db_model.result).all()
-    # session = Session()
     session = Session()
     db = session.query(db_model.topic).all()
     # return db
     return remove_unused_key([topic.__dict__ for topic in db])
+
+
+def get_topic():
+    session = Session()
+    db = session.query(db_model.topic).all()
+    topic = remove_unused_key([topic.__dict__ for topic in db])
+    topic_cnt = len(topic)
+    idx = random.randrange(topic_cnt)
+    return topic[idx]
 
 
 # async def add_result(db: AsyncSession, add_result: schema.AddResult) -> model.result:
