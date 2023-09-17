@@ -9,12 +9,6 @@ import { Result } from './result';
 import { Talking } from './talking';
 import { Waiting } from './waiting';
 export default function Home() {
-  const senryu = [
-    'あああああ\nあああああああ\nあああああ',
-    'いいいいい\nあああああああ\nあああああ',
-    'ううううう\nあああああああ\nあああああ',
-    'えええええ\nあああああああ\nあああああ',
-  ];
   const [progress, setProgress] = useState('waiting');
   const [topic, setTopic] = useState({ wolf: '', civil: '' });
 
@@ -46,9 +40,7 @@ export default function Home() {
       {progress === 'ingame' && (
         <InGame setProgress={setProgress} topics={topic} />
       )}
-      {progress === 'talking' && (
-        <Talking setProgress={setProgress} senryu={senryu} />
-      )}
+      {progress === 'talking' && <Talking setProgress={setProgress} />}
       {progress === 'result' && (
         <Result setProgress={setProgress} topics={topic} />
       )}

@@ -1,103 +1,92 @@
 import { Grid, GridItem, Text, Textarea } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { Socket } from 'socket.io-client';
 
 import styles from '@/app/page.module.css';
 import { ActionButton } from '@/component/actionButton';
 import { Timer } from '@/component/timer';
-import { usersAtom } from '@/recoil/atoms/users';
 
 interface InGameProps {
   setProgress: Dispatch<SetStateAction<string>>;
-  topics: {
-    wolf: string;
-    civil: string;
-  };
+  socketRef: React.RefObject<Socket>;
+  topic: string;
 }
-export const InGame: React.FC<InGameProps> = ({ setProgress, topics }) => {
-  const [confirm, setConfirm] = useState<boolean>(false);
-  const [users, setUsers] = useRecoilState(usersAtom);
-  const [currentUserIndex, setCurrentUserIndex] = useState<number>(0);
-
-  const getRandomInt = (max: number) => {
-    return Math.floor(Math.random() * max);
-  };
-
-  useEffect(() => {
-    const wolfIndex = getRandomInt(users.length);
-    setUsers((prevState) => {
-      return prevState.map((user, i) => {
-        return i === wolfIndex
-          ? { ...user, topic: topics.wolf }
-          : { ...user, topic: topics.civil };
-      });
-    });
-  }, [users.length, setUsers, topics]);
-
-  useEffect(() => {
-    if (currentUserIndex === users.length) {
-      setProgress('talking');
-    }
-  }, [currentUserIndex, setProgress, users.length]);
-
+export const InGame: React.FC<InGameProps> = ({
+  setProgress,
+  socketRef,
+  topic,
+}) => {
   return (
-    <>
-      {confirm ? (
-        <CreateSenryu
-          currentUserIndex={currentUserIndex}
-          setCurrentUserIndex={setCurrentUserIndex}
-          setConfirm={setConfirm}
-        />
-      ) : (
-        <ConfirmPlayer
-          name={users[currentUserIndex]?.name}
-          setConfirm={setConfirm}
-        />
-      )}
-    </>
+    <CreateSenryu
+      socketRef={socketRef}
+      setProgress={setProgress}
+      topic={topic}
+    />
   );
 };
 
 interface CreateSenryuProps {
-  currentUserIndex: number;
-  setCurrentUserIndex: Dispatch<SetStateAction<number>>;
-  setConfirm: Dispatch<SetStateAction<boolean>>;
+  socketRef: React.RefObject<Socket>;
+  setProgress: Dispatch<SetStateAction<string>>;
+  setSenryuList: Dispatch<SetStateAction<Data>>;
+  topic: string;
+}
+
+interface Data {
+  senryuList: Array<SenryuList>;
+}
+
+interface SenryuList {
+  id: string;
+  name: string;
+  topic: string;
+  senryu: string;
+  is_wolf: boolean;
+  session_id: string;
 }
 const CreateSenryu: React.FC<CreateSenryuProps> = ({
-  currentUserIndex,
-  setCurrentUserIndex,
-  setConfirm,
+  socketRef,
+  setProgress,
+  setSenryuList,
+  topic,
 }) => {
-  const [users, setUsers] = useRecoilState(usersAtom);
   const [text, setText] = useState('');
 
-  const onClick = () => {
-    setUsers((prevState) => {
-      return prevState.map((user, i) => {
-        return i === currentUserIndex ? { ...user, senryu: text } : user;
+  useEffect(() => {
+    if (socketRef.current) {
+      socketRef.current.on('collect_senryu', () => {
+        setProgress('talking');
       });
-    });
-    setConfirm(false);
-    setCurrentUserIndex((prevState) => prevState + 1);
+    }
+  }, []);
+  const onClick = () => {
+    if (socketRef.current) {
+      //川柳を投稿
+      socketRef.current.emit('post_senryu', text);
+      //川柳集合
+      socketRef.current.on('collect_senryu', (data) => {
+        setSenryuList(data);
+        setProgress('talking');
+      });
+    }
   };
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
   return (
     <Grid templateRows='repeat(5)' gap={'5%'} h='100vh'>
-      <GridItem w='100%' h='10%' className={styles.center}>
-        <Text
-          fontSize='3xl'
-          className={styles.title}
-        >{`${users[currentUserIndex]?.name}の番`}</Text>
+      <GridItem w='100%' h='10%' className={styles['center']}>
+        <Text fontSize='3xl' className={styles['title']}>
+          川柳を入力
+        </Text>
       </GridItem>
-      <GridItem w='100%' h='10%' className={styles.center}>
-        <Text fontSize='2xl'>お題:{`${users[currentUserIndex]?.topic}`}</Text>
+      <GridItem w='100%' h='10%' className={styles['center']}>
+        <Text fontSize='2xl'>お題:{topic}</Text>
       </GridItem>
-      <GridItem w='100%' h='10%' className={styles.center}>
-        <Timer limit={10} action={onClick} />
+      <GridItem w='100%' h='10%' className={styles['center']}>
+        <Timer limit={300} action={onClick} />
       </GridItem>
-      <GridItem w='100%' h='30%' className={styles.center}>
+      <GridItem w='100%' h='30%' className={styles['center']}>
         <Textarea
           placeholder='あああああ'
           value={text}
@@ -105,26 +94,9 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
           className={styles.textaera}
         />
       </GridItem>
-      <GridItem w='100%' h='20%' className={styles.center}>
+      <GridItem w='100%' h='20%' className={styles['center']}>
         <ActionButton action={onClick} title={'提出'} />
       </GridItem>
     </Grid>
-  );
-};
-
-interface ConfirmPlayerProps {
-  name: string | undefined;
-  setConfirm: Dispatch<SetStateAction<boolean>>;
-}
-const ConfirmPlayer: React.FC<ConfirmPlayerProps> = ({ name, setConfirm }) => {
-  const onClick = () => {
-    setConfirm(true);
-  };
-
-  return (
-    <>
-      <div>{`${name}の番です`}</div>
-      <button onClick={onClick}>OK</button>
-    </>
   );
 };
