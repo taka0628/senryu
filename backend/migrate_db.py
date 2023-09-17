@@ -11,7 +11,7 @@ import random
 import string
 
 
-DB_URL = "mysql+pymysql://root@localhost:33306/senryu?charset=utf8"
+DB_URL = "mysql+pymysql://root@db:3306/senryu?charset=utf8"
 engine = create_engine(DB_URL, echo=True)
 Session = sessionmaker(bind=engine)
 

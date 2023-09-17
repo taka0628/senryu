@@ -25,7 +25,7 @@ import random
 import db.db as db
 import db.models as db_model
 
-ASYNC_DB_URL = "mysql+pymysql://root@localhost:33306/senryu?charset=utf8"
+ASYNC_DB_URL = "mysql+pymysql://root@db:3306/senryu?charset=utf8"
 
 engine = create_engine(ASYNC_DB_URL, echo=True)
 Session = sessionmaker(
