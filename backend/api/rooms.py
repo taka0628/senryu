@@ -36,8 +36,7 @@ def create_room():
     
     if data['theme'] is None or data['topic1'] is None or data['topic2'] is None:
         # テーマ情報がクライアントから渡されなかった場合
-        topics_data_list = db.get_topics()
-        topic_data = random.choice(topics_data_list)
+        topic_data = db.get_topic()
         theme = topic_data['theme']
 
         randval = random.randint(0, 1)
