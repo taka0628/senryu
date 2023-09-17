@@ -58,9 +58,10 @@ export default function Home() {
       console.log(Object.values(data));
 
       Object.values(data).forEach((u) => {
+        console.log(u);
         user.push({
           id: u.id,
-          name: u.username,
+          name: u.name,
           senryu: u.senryu,
         });
       });

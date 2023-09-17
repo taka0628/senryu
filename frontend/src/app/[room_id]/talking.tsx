@@ -29,9 +29,11 @@ export const Talking: React.FC<TalkingProps> = ({ users, socketRef }) => {
       room_id: roomId.slice(1),
       post_player_id: voted,
     });
+    console.log(users);
     setIswaiting(true);
   };
   const vote = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(e.target.value);
     setVoted(e.target.value);
   };
   return (
@@ -39,7 +41,7 @@ export const Talking: React.FC<TalkingProps> = ({ users, socketRef }) => {
       {isWaiting ? (
         <Waiting message={'他の参加者の投票'} />
       ) : (
-        <Grid templateRows='1fr 1fr 1fr 10fr' h='100vh'>
+        <Grid templateRows='1fr 1fr 1fr 1fr 10fr' h='100vh'>
           <GridItem w='100%' h='10%' className={styles['center']}>
             <Select placeholder='ウルフ選択' onChange={(e) => vote(e)}>
               {users.map((u, i) => {
