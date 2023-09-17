@@ -2,12 +2,13 @@ import { Grid, GridItem, Text, Select } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import { MutableRefObject, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { Waiting } from 'waiting';
 
 import styles from '@/app/page.module.css';
 import { ActionButton } from '@/component/actionButton';
 import { Tanzaku } from '@/component/tanzaku';
 import { Timer } from '@/component/timer';
+
+import { Waiting } from './waiting';
 
 interface TalkingProps {
   users: User[];
