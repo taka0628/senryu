@@ -19,7 +19,7 @@ export const Talking: React.FC<TalkingProps> = ({ setProgress }) => {
     setProgress('result');
   };
   return (
-    <Grid templateRows='1fr 1fr 1fr 3fr' h='100vh'>
+    <Grid templateRows='1fr 1fr 1fr 10fr' h='100vh'>
       <GridItem w='100%' h='10%' className={styles['center']}>
         <Text fontSize='3xl' className={styles['title']}>
           投票
