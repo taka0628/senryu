@@ -18,7 +18,6 @@ export default function Home() {
   const socketRef = useRef<Socket>();
   const [isConnected, setIsConnected] = useState(false);
   const [progress, setProgress] = useState('enter_room');
-  const [senryuList, setSenryuList] = useState();
   useEffect(() => {
     axios
       .get(`room${roomId}`)
@@ -50,12 +49,6 @@ export default function Home() {
       console.log(data);
     });
 
-    //川柳が揃ったら
-    websocket.on('collect_senryu', (data) => {
-      setSenryuList(data);
-      setProgress('talking');
-    });
-
     websocket.on('error', (data) => {
       console.log(data);
     });
@@ -73,15 +66,10 @@ export default function Home() {
         <EnterRoom socketRef={socketRef} roomName={roomName} />
       )}
       {isConnected && progress === 'ingame' && (
-        <InGame
-          socketRef={socketRef}
-          setProgress={setProgress}
-          setSenryuList={setSenryuList}
-          topic={topic}
-        />
+        <InGame socketRef={socketRef} topic={topic} />
       )}
       {isConnected && progress === 'talking' && (
-        <Talking socketRef={socketRef} senryuList={senryuList} />
+        <Talking socketRef={socketRef} />
       )}
       {isConnected && progress === 'result' && <Result socketRef={socketRef} />}
     </RecoilRoot>

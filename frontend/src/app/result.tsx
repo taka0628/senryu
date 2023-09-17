@@ -68,18 +68,18 @@ export const Result: React.FC<ResultProps> = ({ setProgress, topics }) => {
 
   return (
     <Grid templateRows='repeat(4)' h='100vh'>
-      <GridItem w='100%' h='20%' className={styles['center']}>
-        <Text fontSize='5xl' className={styles['title']}>
+      <GridItem w='100%' h='20%' className={styles.center}>
+        <Text fontSize='5xl' className={styles.title}>
           結果発表
         </Text>
       </GridItem>
-      <GridItem w='100%' h='60%' className={styles['center']}>
+      <GridItem w='100%' h='60%' className={styles.center}>
         <div>
           <CivilList />
           <WolfList />
         </div>
       </GridItem>
-      <GridItem w='100%' h='20%' className={styles['center']}>
+      <GridItem w='100%' h='20%' className={styles.center}>
         <ActionButton action={onClick} title={'ホームに戻る'} />
       </GridItem>
     </Grid>

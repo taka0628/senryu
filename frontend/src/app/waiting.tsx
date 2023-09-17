@@ -35,21 +35,21 @@ export const Waiting: React.FC<WaitingProps> = ({ setProgress }) => {
     );
   };
   return (
-    <Grid templateRows='1fr 3fr 1fr 1fr' gap={4} h='100vh'>
-      <GridItem w='100%' h='20%' className={styles['center']}>
-        <Text fontSize='5xl' className={styles['title']}>
-          川柳ウルフ
+    <Grid templateRows='repeat(4)' h='100vh'>
+      <GridItem w='100%' h='20%' className={styles.center}>
+        <Text fontSize='5xl' className={styles.title}>
+          タイトル
         </Text>
       </GridItem>
-      <GridItem w='100%' h='60%' className={styles['center']}>
+      <GridItem w='100%' h='60%' className={styles.center}>
         <div>
           <UserList />
         </div>
       </GridItem>
-      <GridItem w='100%' h='10%' className={styles['center']}>
+      <GridItem w='100%' h='10%' className={styles.center}>
         <ActionButton action={addPlayer} title={'プレイヤーを追加'} />
       </GridItem>
-      <GridItem w='100%' h='10%' className={styles['center']}>
+      <GridItem w='100%' h='10%' className={styles.center}>
         <ActionButton action={start} title={'ゲームを始める'} />
       </GridItem>
     </Grid>
