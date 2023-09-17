@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { RecoilRoot } from 'recoil';
 import { io, Socket } from 'socket.io-client';
 
+import { EnterRoom } from './enterRoom';
 import { InGame } from './inGame';
 import { Result } from './result';
 import { Talking } from './talking';
@@ -42,7 +43,7 @@ export default function Home() {
       {isConnected && progress === 'enter_room' && (
         <EnterRoom socketRef={socketRef} />
       )}
-      {isConnected && progress === 'ingame' && <InGame soektRef={socketRef} />}
+      {isConnected && progress === 'ingame' && <InGame socketRef={socketRef} />}
       {isConnected && progress === 'talking' && (
         <Talking socketRef={socketRef} />
       )}
