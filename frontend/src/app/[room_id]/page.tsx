@@ -19,6 +19,7 @@ export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
   const [progress, setProgress] = useState('enter_room');
   const [senryuList, setSenryuList] = useState();
+  const [resultList, setResultList] = useState();
   const [users, setUsers] = useState([]);
   useEffect(() => {
     axios
@@ -53,6 +54,13 @@ export default function Home() {
 
     //川柳が揃ったら
     websocket.on('collect_senryu', (data) => {
+      setSenryuList(data);
+      setProgress('talking');
+    });
+    //投票が揃ったら
+    websocket.on('collect_polls', (data) => {
+      setResultList(data);
+    });
       const user = [];
       setSenryuList(data);
       console.log(Object.values(data));
@@ -68,7 +76,6 @@ export default function Home() {
       setUsers(user);
       setProgress('talking');
     });
-
     websocket.on('error', (data) => {
       console.log(data);
     });
@@ -96,7 +103,7 @@ export default function Home() {
       {isConnected && progress === 'talking' && (
         <Talking socketRef={socketRef} users={users} />
       )}
-      {isConnected && progress === 'result' && <Result socketRef={socketRef} />}
+      {isConnected && progress === 'result' && <Result socketRef={socketRef} resultList={resultList}/>}
     </RecoilRoot>
   );
 }
