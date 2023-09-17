@@ -20,6 +20,7 @@ export default function Home() {
   const [progress, setProgress] = useState('enter_room');
   const [senryuList, setSenryuList] = useState();
   const [resultList, setResultList] = useState();
+  const [users, setUsers] = useState([]);
   useEffect(() => {
     axios
       .get(`room${roomId}`)
@@ -60,7 +61,20 @@ export default function Home() {
     websocket.on('collect_polls', (data) => {
       setResultList(data);
     });
+      const user = [];
+      setSenryuList(data);
+      console.log(Object.values(data));
 
+      Object.values(data).forEach((u) => {
+        user.push({
+          id: u.id,
+          name: u.username,
+          senryu: u.senryu,
+        });
+      });
+      setUsers(user);
+      setProgress('talking');
+    });
     websocket.on('error', (data) => {
       console.log(data);
     });
@@ -86,7 +100,7 @@ export default function Home() {
         />
       )}
       {isConnected && progress === 'talking' && (
-        <Talking socketRef={socketRef} senryuList={senryuList} />
+        <Talking socketRef={socketRef} users={users} />
       )}
       {isConnected && progress === 'result' && <Result socketRef={socketRef} resultList={resultList}/>}
     </RecoilRoot>

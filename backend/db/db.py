@@ -13,6 +13,8 @@
 
 # from sqlalchemy.orm import sessionmaker, declarative_base
 
+from typing import List
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -34,6 +36,12 @@ Session = sessionmaker(
 def add_result(result: db_model.result):
     session = Session()
     session.add(result)
+    session.commit()
+
+def add_results(results: List[db_model.result]):
+    session = Session()
+    for result in results:
+        session.add(result)
     session.commit()
 
 
@@ -58,11 +66,16 @@ def get_results():
     #     )
 
 
+# DBからroom_idが同じ川柳を取得
+def get_room_results(room_id: str):
+    session = Session()
+    db = session.query(db_model.result).filter(db_model.result.room_id == room_id).all()
+    return remove_unused_key([result.__dict__ for result in db])
+
+
 def get_topics():
-    # データを取得
     session = Session()
     db = session.query(db_model.topic).all()
-    # return db
     return remove_unused_key([topic.__dict__ for topic in db])
 
 
