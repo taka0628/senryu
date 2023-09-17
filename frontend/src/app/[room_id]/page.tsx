@@ -40,7 +40,6 @@ export default function Home() {
 
   return (
     <RecoilRoot>
-      <EnterRoom socketRef={socketRef} />
       {isConnected && progress === 'enter_room' && (
         <EnterRoom socketRef={socketRef} />
       )}
