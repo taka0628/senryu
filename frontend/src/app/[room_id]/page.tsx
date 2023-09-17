@@ -1,57 +1,50 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { RecoilRoot } from 'recoil';
-
-import axios from '@/utils/axios';
+import { io, Socket } from 'socket.io-client';
 
 import { InGame } from './inGame';
 import { Result } from './result';
 import { Talking } from './talking';
-import { Waiting } from './waiting';
 export default function Home() {
-  const senryu = [
-    'あああああ\nあああああああ\nあああああ',
-    'いいいいい\nあああああああ\nあああああ',
-    'ううううう\nあああああああ\nあああああ',
-    'えええええ\nあああああああ\nあああああ',
-  ];
+  const socketRef = useRef<Socket>();
+  const [isConnected, setIsConnected] = useState(false);
   const [progress, setProgress] = useState('waiting');
-  const [topic, setTopic] = useState({ wolf: '', civil: '' });
-
   useEffect(() => {
-    axios
-      .get('topic')
-      .then((res) => {
-        console.log(res);
-        if (Math.random() > 0.5) {
-          setTopic({
-            wolf: res.data.topic1,
-            civil: res.data.topic2,
-          });
-        } else {
-          setTopic({
-            wolf: res.data.topic2,
-            civil: res.data.topic1,
-          });
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    const websocket = io('ws://localhost:5000');
+    socketRef.current = websocket;
+    websocket.on('connect', function () {
+      setIsConnected(true);
+      console.log('Connected');
+    });
+
+    //接続が切れた時
+    websocket.on('disconnect', function () {
+      console.log('closed');
+      setIsConnected(false);
+    });
+
+    // メンバーが集まったらゲーム開始
+    websocket.on('gather_member', () => {
+      setProgress('ingame');
+    });
+
+    return () => {
+      if (socketRef.current === null) {
+        return;
+      }
+      websocket.emit('disconnect');
+    };
   }, []);
 
   return (
     <RecoilRoot>
-      {progress === 'waiting' && <Waiting setProgress={setProgress} />}
-      {progress === 'ingame' && (
-        <InGame setProgress={setProgress} topics={topic} />
+      {isConnected && progress === 'enter_room' && (
+        <EnterRoom socketRef={socketRef} />
       )}
-      {progress === 'talking' && (
-        <Talking setProgress={setProgress} senryu={senryu} />
-      )}
-      {progress === 'result' && (
-        <Result setProgress={setProgress} topics={topic} />
-      )}
+      {isConnected && progress === 'ingame' && <InGame />}
+      {isConnected && progress === 'talking' && <Talking />}
+      {isConnected && progress === 'result' && <Result />}
     </RecoilRoot>
   );
 }
