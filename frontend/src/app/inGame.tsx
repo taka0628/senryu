@@ -84,28 +84,28 @@ const CreateSenryu: React.FC<CreateSenryuProps> = ({
     setText(e.target.value);
   };
   return (
-    <Grid templateRows='1fr 1fr 1fr 3fr 2fr' gap={4} h='100vh'>
-      <GridItem w='100%' h='10%' className={styles['center']}>
+    <Grid templateRows='repeat(5)' gap={'5%'} h='100vh'>
+      <GridItem w='100%' h='10%' className={styles.center}>
         <Text
           fontSize='3xl'
-          className={styles['title']}
+          className={styles.title}
         >{`${users[currentUserIndex]?.name}の番`}</Text>
       </GridItem>
-      <GridItem w='100%' h='10%' className={styles['center']}>
+      <GridItem w='100%' h='10%' className={styles.center}>
         <Text fontSize='2xl'>お題:{`${users[currentUserIndex]?.topic}`}</Text>
       </GridItem>
-      <GridItem w='100%' h='10%' className={styles['center']}>
-        <Timer limit={300} action={onClick} />
+      <GridItem w='100%' h='10%' className={styles.center}>
+        <Timer limit={10} action={onClick} />
       </GridItem>
-      <GridItem w='100%' h='30%' className={styles['center']}>
+      <GridItem w='100%' h='30%' className={styles.center}>
         <Textarea
           placeholder='あああああ'
           value={text}
           onChange={onChange}
-          className={styles['textaera']}
+          className={styles.textaera}
         />
       </GridItem>
-      <GridItem w='100%' h='20%' className={styles['center']}>
+      <GridItem w='100%' h='20%' className={styles.center}>
         <ActionButton action={onClick} title={'提出'} />
       </GridItem>
     </Grid>
@@ -122,15 +122,9 @@ const ConfirmPlayer: React.FC<ConfirmPlayerProps> = ({ name, setConfirm }) => {
   };
 
   return (
-    <Grid templateRows='1fr 1fr' h='100vh'>
-      <GridItem w='100%' h='10%' className={styles['center']}>
-        <Text fontSize='3xl' className={styles['title']}>
-          {`${name}の番です`}
-        </Text>
-      </GridItem>
-      <GridItem w='100%' h='10%' className={styles['center']}>
-        <ActionButton action={onClick} title={'OK'} />
-      </GridItem>
-    </Grid>
+    <>
+      <div>{`${name}の番です`}</div>
+      <button onClick={onClick}>OK</button>
+    </>
   );
 };
