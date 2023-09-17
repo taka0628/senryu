@@ -68,7 +68,7 @@ def create_room():
         'wolf_topic': wolf_topic,
         'non_wolf_topic': non_wolf_topic,
         'wolf_player_num': random.randint(0, data['user_cnt'] - 1),
-        'player_list': [],
+        'player_dict': {},
     }
 
     print(f"Created room {room_id} ({rooms[room_id]})")
@@ -80,31 +80,45 @@ def create_room():
 def join_room(data):
     room_id = data['room_id']
     username = data['name']
-    # TODO: session_idをプレイや情報にいれて、送信時もそれを使う
     session_id = request.sid # type: ignore
 
     if room_id not in rooms:
         print(f"Error: room {room_id} not found ({rooms})")
-        socketio.emit('error', {"status": "error", "errors": "room not found"})
+        socketio.emit(
+            'error', 
+            {"status": "error", "errors": "room not found"}, 
+            room=session_id
+        )
         return
-    elif len(rooms[room_id]['player_list']) >= rooms[room_id]['user_cnt']:
+    elif len(rooms[room_id]['player_dict']) >= rooms[room_id]['user_cnt']:
         print(f"Error: room {room_id} is full ({rooms})")
-        socketio.emit('error', {"status": "error", "errors": "room is full"})
+        socketio.emit(
+            'error', 
+            {"status": "error", "errors": "room is full"}, 
+            room=session_id
+        )
         return
     
     # NOTE: 衝突する可能性あり
-    is_wolf = len(rooms[room_id]['player_list']) == rooms[room_id]['wolf_player_num']
+    is_wolf = len(rooms[room_id]['player_dict']) == rooms[room_id]['wolf_player_num']
 
-    rooms[room_id]['player_list'].append({
+    rooms[room_id]['player_dict'][session_id] = {
         'id': str(uuid.uuid4()),
         'name': username,
         'topic': rooms[room_id]['wolf_topic'] if is_wolf else rooms[room_id]['non_wolf_topic'],
         'senryu': None, # 川柳を受け取ったら値が入る
         'is_wolf': is_wolf,
-    })
+        'session_id': session_id,
+    }
 
-    if len(rooms[room_id]['player_list']) == rooms[room_id]['user_cnt']:
-        # 全員揃ったらゲーム開始
+    if len(rooms[room_id]['player_dict']) == rooms[room_id]['user_cnt']:
+        # 全員揃ったら各プレイヤーにゲーム開始を通知
         print(f"Game started in room {room_id} ({rooms[room_id]})")
-        socketio.emit('gather_member', )
+        for player_info in rooms[room_id]['player_dict'].values():
+            # 各プレイヤーにゲーム開始を通知
+            socketio.emit(
+                'game_start', 
+                player_info, 
+                room=player_info['session_id']
+            )
         return
