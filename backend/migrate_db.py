@@ -6,6 +6,10 @@ from db.models import Base
 import db.db as db
 import db.models as model
 
+import uuid
+import random
+import string
+
 
 DB_URL = "mysql+pymysql://root@db:3306/senryu?charset=utf8"
 engine = create_engine(DB_URL, echo=True)
@@ -38,45 +42,100 @@ def make_sample_topics():
 
 
 def make_sample_results():
+    uid = str(uuid.uuid1())
+    temp_results = [model.result(
+            room_id=uid,
+            senryu="ハッカソン\n創意の競演\n未来の鍵",
+            username="user1",
+            topic="ハッカソン",
+            is_wolf=False,
+        ), model.result(
+            room_id=uid,
+            senryu="コードの語\n画面に響く\n夢のシンフォニー",
+            username="user2",
+            topic="ハッカソン",
+            is_wolf=False,
+        ),
+        model.result(
+            model.result(
+            room_id=uid,
+            senryu="チームの絆\n一糸乱れぬ\n目指す成功",
+            username="user3",
+            topic="ハッカソン",
+            is_wolf=False,
+        ),
+        )
+        ]
+    db.add_results(temp_results)
     db.add_result(
         model.result(
-            game_id=1, senryu="ハッカソン\n創意の競演\n未来の鍵", topic="ハッカソン", is_wolf=False
+            room_id=uid,
+            senryu="ハッカソン\n創意の競演\n未来の鍵",
+            username="user1",
+            topic="ハッカソン",
+            is_wolf=False,
         )
     )
     db.add_result(
         model.result(
-            game_id=1, senryu="コードの語\n画面に響く\n夢のシンフォニー", topic="ハッカソン", is_wolf=False
+            room_id=uid,
+            senryu="コードの語\n画面に響く\n夢のシンフォニー",
+            username="user2",
+            topic="ハッカソン",
+            is_wolf=False,
         )
     )
     db.add_result(
         model.result(
-            game_id=1, senryu="チームの絆\n一糸乱れぬ\n目指す成功", topic="ハッカソン", is_wolf=False
+            room_id=uid,
+            senryu="チームの絆\n一糸乱れぬ\n目指す成功",
+            username="user3",
+            topic="ハッカソン",
+            is_wolf=False,
         )
     )
     db.add_result(
         model.result(
-            game_id=1, senryu="Pythonの\nコード\n優雅な舞", topic="プログラミング言語", is_wolf=True
+            room_id=uid,
+            senryu="Pythonの\nコード\n優雅な舞",
+            username="user4",
+            topic="プログラミング言語",
+            is_wolf=True,
+        )
+    )
+    uid = str(uuid.uuid1())
+    db.add_result(
+        model.result(
+            room_id=uid,
+            senryu="カフェイン注入\n仲間と笑顔\n夜が明ける",
+            username="user1",
+            topic="ハッカソン",
+            is_wolf=False,
         )
     )
     db.add_result(
         model.result(
-            game_id=2, senryu="カフェイン注入\n仲間と笑顔\n夜が明ける", topic="ハッカソン", is_wolf=False
+            room_id=uid,
+            senryu="デジタルの森\nアイデアの芽\n成長の季",
+            username="user2",
+            topic="ハッカソン",
+            is_wolf=False,
         )
     )
     db.add_result(
         model.result(
-            game_id=2, senryu="デジタルの森\nアイデアの芽\n成長の季", topic="ハッカソン", is_wolf=False
+            room_id=uid,
+            senryu="コンピュータ\n数字と文字\n未来の詩",
+            username="user3",
+            topic="ハッカソン",
+            is_wolf=False,
         )
     )
     db.add_result(
         model.result(
-            game_id=2, senryu="コンピュータ\n数字と文字\n未来の詩", topic="ハッカソン", is_wolf=False
-        )
-    )
-    db.add_result(
-        model.result(
-            game_id=2,
+            room_id=uid,
             senryu="JavaScript\nウェブの魔法\n輝く星",
+            username="user4",
             topic="プログラミング言語",
             is_wolf=True,
         )

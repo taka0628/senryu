@@ -3,6 +3,7 @@ import datetime
 from flask import Blueprint, request
 
 from api import rooms
+from db import db, models
 from main import socketio
 
 app = Blueprint("senryu", __name__)
@@ -65,19 +66,17 @@ def collect_polls(data):
 
     player_info = rooms.rooms[room_id]['player_dict'][player_id]
 
-    result_data = {
-        'dt': datetime.datetime.now(),
-        'room_id': room_id,
-        'username': player_info['name'],
-        'senryu': player_info['senryu'],
-        'topic': player_info['topic'],
-        'is_wolf': player_info['is_wolf'],
-    }
-    # TODO: DBに投票結果を保存
+    result_data = models.result(
+        dt=datetime.datetime.now(),
+        room_id=room_id,
+        username=player_info['name'],
+        senryu=player_info['senryu'],
+        topic=player_info['topic'],
+        is_wolf=player_info['is_wolf'],
+    )
+    db.add_result(result_data)
 
-    # TODO: DBから投票結果を取得
-    results = []
-
+    results = db.get_room_results(room_id)
     if len(results) == len(rooms.rooms[room_id]['player_dict']):
         # 全員の投票が集まったら
         socketio.emit(
