@@ -1,14 +1,16 @@
 import { Grid, GridItem, Text, Textarea } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import { Socket } from 'socket.io-client';
 
+import { Waiting } from '@/app/[room_id]/waiting';
 import styles from '@/app/page.module.css';
 import { ActionButton } from '@/component/actionButton';
 import { Timer } from '@/component/timer';
 
 interface InGameProps {
   setProgress: Dispatch<SetStateAction<string>>;
-  socketRef: React.RefObject<Socket>;
+  socketRef: MutableRefObject<Socket | undefined>;
   topic: string;
 }
 export const InGame: React.FC<InGameProps> = ({
@@ -26,54 +28,30 @@ export const InGame: React.FC<InGameProps> = ({
 };
 
 interface CreateSenryuProps {
-  socketRef: React.RefObject<Socket>;
-  setProgress: Dispatch<SetStateAction<string>>;
-  setSenryuList: Dispatch<SetStateAction<Data>>;
+  socketRef: MutableRefObject<Socket | undefined>;
   topic: string;
 }
 
-interface Data {
-  senryuList: Array<SenryuList>;
-}
-
-interface SenryuList {
-  id: string;
-  name: string;
-  topic: string;
-  senryu: string;
-  is_wolf: boolean;
-  session_id: string;
-}
-const CreateSenryu: React.FC<CreateSenryuProps> = ({
-  socketRef,
-  setProgress,
-  setSenryuList,
-  topic,
-}) => {
+const CreateSenryu: React.FC<CreateSenryuProps> = ({ socketRef, topic }) => {
   const [text, setText] = useState('');
+  const [isWaiting, setIswaiting] = useState(false);
+  const roomId = usePathname();
 
-  useEffect(() => {
-    if (socketRef.current) {
-      socketRef.current.on('collect_senryu', () => {
-        setProgress('talking');
-      });
-    }
-  }, []);
   const onClick = () => {
-    if (socketRef.current) {
-      //川柳を投稿
-      socketRef.current.emit('post_senryu', text);
-      //川柳集合
-      socketRef.current.on('collect_senryu', (data) => {
-        setSenryuList(data);
-        setProgress('talking');
-      });
-    }
+    setIswaiting(true);
+      console.log(socketRef)
+    //川柳を投稿
+    socketRef.current?.emit('post_senryu', {
+      room_id: roomId.slice(1),
+      senryu: text,
+    });
   };
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
-  return (
+  return isWaiting ? (
+    <Waiting message={'他のメンバーの入力'} />
+  ) : (
     <Grid templateRows='repeat(5)' gap={'5%'} h='100vh'>
       <GridItem w='100%' h='10%' className={styles['center']}>
         <Text fontSize='3xl' className={styles['title']}>
