@@ -13,6 +13,8 @@
 
 # from sqlalchemy.orm import sessionmaker, declarative_base
 
+from typing import List
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -23,7 +25,7 @@ import random
 import db.db as db
 import db.models as db_model
 
-ASYNC_DB_URL = "mysql+pymysql://root@db:3306/senryu?charset=utf8"
+ASYNC_DB_URL = "mysql+pymysql://root@localhost:33306/senryu?charset=utf8"
 
 engine = create_engine(ASYNC_DB_URL, echo=True)
 Session = sessionmaker(
@@ -36,10 +38,10 @@ def add_result(result: db_model.result):
     session.add(result)
     session.commit()
 
-
-def add_results(result: db_model.result):
+def add_results(results: List[db_model.result]):
     session = Session()
-    session.add(result)
+    for result in results:
+        session.add(result)
     session.commit()
 
 
@@ -65,7 +67,7 @@ def get_results():
 
 
 # DBからroom_idが同じ川柳を取得
-def get_room_result(room_id: str):
+def get_room_results(room_id: str):
     session = Session()
     db = session.query(db_model.result).filter(db_model.result.room_id == room_id).all()
     return remove_unused_key([result.__dict__ for result in db])

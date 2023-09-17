@@ -13,6 +13,7 @@ class result(Base):
     dt = Column(DateTime, default=datetime.now(), nullable=True)
     room_id = Column(String(1024), nullable=False)
     username = Column(String(1024), nullable=False)
+    post_username = Column(String(1024), nullable=True)
     senryu = Column(String(1024), nullable=False)
     topic = Column(String(1024), nullable=False)
     is_wolf = Column(Boolean, nullable=False)
