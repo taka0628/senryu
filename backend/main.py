@@ -209,13 +209,15 @@ def poll(data):
         is_wolf=player_info['is_wolf'],
     )
     db.add_result(result_data)
+    print(result_data)
 
     results = db.get_room_results(room_id)
     if len(results) == len(rooms[room_id]['player_dict']):
         # 全員の投票が集まったら
+        print('collect all')
         socketio.emit(
             'collect_polls',
-            results,
+            [{key: value if key != 'dt' else str(value) for key, value in result.items()} for result in results],
             room=session_id,
         )
         return
